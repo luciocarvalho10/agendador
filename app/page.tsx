@@ -6,8 +6,12 @@ import Image from "next/image"
 import { Card, CardContent } from "./_components/ui/card"
 import { Badge } from "./_components/ui/badge"
 import { Avatar, AvatarImage } from "./_components/ui/avatar"
+import { db } from "./_lib/prisma"
+import BarbershopItem from "./_components/barbershopItem"
 
-export default function Home() {
+const Home = async () => {
+  const barbershops = await db.barbershop.findMany({})
+
   return (
     <div className="">
       <Header />
@@ -26,12 +30,17 @@ export default function Home() {
           <Image
             src="/banner-01.png"
             alt="Agende nos melhores com FSW Barber"
+            loading="eager"
             fill
             className="rounded-xl object-cover"
           />
         </div>
 
-        <Card className="mt-6">
+        <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
+          Agendamentos
+        </h2>
+
+        <Card>
           <CardContent className="flex justify-between">
             <div className="flex flex-col gap-2 py-5">
               <Badge>Confirmado</Badge>
@@ -52,7 +61,19 @@ export default function Home() {
             </div>
           </CardContent>
         </Card>
+
+        <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
+          Recomendados
+        </h2>
+
+        <div className="flex scrollbar-none gap-4 overflow-auto">
+          {barbershops.map((barbershop) => (
+            <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+          ))}
+        </div>
       </div>
     </div>
   )
 }
+
+export default Home
