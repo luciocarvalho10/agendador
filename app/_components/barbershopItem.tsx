@@ -17,6 +17,7 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
           <Image
             loading="eager"
             fill
+            sizes="(max-width: 640px) 160px, (max-width: 1024px) 200px, 240px"
             className="rounded-lg object-cover"
             src={barbershop.imageUrl}
             alt={barbershop.name}
