@@ -1,13 +1,12 @@
-import { SearchIcon } from "lucide-react"
+import BarbershopItem from "@/app/_components/barbershopItem"
+import BookingItem from "@/app/_components/bookingItem"
 import Header from "@/app/_components/header"
 import { Button } from "@/app/_components/ui/button"
 import { Input } from "@/app/_components/ui/input"
-import Image from "next/image"
-import { Card, CardContent } from "@/app/_components/ui/card"
-import { db } from "@/app/_lib/prisma"
-import BarbershopItem from "@/app/_components/barbershopItem"
 import { quickSearchOptions } from "@/app/_constants/search"
-import BookingItem from "@/app/_components/bookingItem"
+import { db } from "@/app/_lib/prisma"
+import { SearchIcon } from "lucide-react"
+import Image from "next/image"
 
 const Home = async () => {
   const barbershops = await db.barbershop.findMany({})
@@ -78,16 +77,6 @@ const Home = async () => {
           ))}
         </div>
       </div>
-
-      <footer>
-        <Card>
-          <CardContent className="px-5 py-6">
-            <p className="text-sm text-gray-400">
-              &copy; 2026 Copyrigth <span className="font-bold">AGENDADOR</span>
-            </p>
-          </CardContent>
-        </Card>
-      </footer>
     </div>
   )
 }
