@@ -22,6 +22,7 @@ const BarbarshopPage = async ({ params }) => {
     <div>
       <div className="relative h-62.5 w-full">
         <Image
+          loading="eager"
           src={barbershop.imageUrl}
           alt={barbershop.name}
           fill
@@ -32,7 +33,7 @@ const BarbarshopPage = async ({ params }) => {
           size="icon"
           variant="secondary"
           className="absolute top-4 left-4"
-          asChild
+          aschild="true"
         >
           <Link href="/">
             <ChevronLeftIcon />
@@ -43,7 +44,7 @@ const BarbarshopPage = async ({ params }) => {
           size="icon"
           variant="secondary"
           className="absolute top-4 right-4"
-          asChild
+          aschild="true"
         >
           <Link href="/">
             <MenuIcon />

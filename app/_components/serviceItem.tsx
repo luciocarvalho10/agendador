@@ -13,10 +13,12 @@ const ServiceItem = ({ service }: ServiceItemprops) => {
       <CardContent className="flex items-center gap-3">
         <div className="relative max-h-27.5 min-h-27.5 max-w-27.5 min-w-27.5">
           <Image
+            loading="eager"
             src={service.imageUrl}
             alt={service.name}
             fill
             className="rounded-lg object-cover"
+            sizes="auto"
           />
         </div>
 
@@ -33,7 +35,6 @@ const ServiceItem = ({ service }: ServiceItemprops) => {
             </p>
 
             <Button variant="secondary" size="sm">
-              {" "}
               Reservar
             </Button>
           </div>
