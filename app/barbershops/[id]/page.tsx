@@ -1,13 +1,21 @@
 import PhoneItem from "@/app/_components/phoneItem"
 import ServiceItem from "@/app/_components/serviceItem"
+import SidebarSheet from "@/app/_components/sidebarSheet"
 import { Button } from "@/app/_components/ui/button"
+import { Sheet, SheetTrigger } from "@/app/_components/ui/sheet"
 import { db } from "@/app/_lib/prisma"
 import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
-const BarbarshopPage = async ({ params }) => {
+interface BarbarshopPageProps {
+  params: {
+    id: string
+  }
+}
+
+const BarbarshopPage = async ({ params }: BarbarshopPageProps) => {
   const { id } = await params
   const barbershop = await db.barbershop.findUnique({
     where: { id },
@@ -33,23 +41,26 @@ const BarbarshopPage = async ({ params }) => {
           size="icon"
           variant="secondary"
           className="absolute top-4 left-4"
-          aschild="true"
+          asChild
         >
           <Link href="/">
             <ChevronLeftIcon />
           </Link>
         </Button>
 
-        <Button
-          size="icon"
-          variant="secondary"
-          className="absolute top-4 right-4"
-          aschild="true"
-        >
-          <Link href="/">
-            <MenuIcon />
-          </Link>
-        </Button>
+        <Sheet>
+          <SheetTrigger asChild>
+            {/* With button, heydration happens */}
+            <Button
+              size="icon"
+              variant="outline"
+              className="absolute top-4 right-4"
+            >
+              <MenuIcon />
+            </Button>
+          </SheetTrigger>
+          <SidebarSheet />
+        </Sheet>
       </div>
 
       <div className="border-b border-solid p-5">
