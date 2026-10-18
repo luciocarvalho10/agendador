@@ -12,11 +12,8 @@ const Header = () => {
         <Image src="/logo.png" alt="Agendador" height={18} width={120} />
 
         <Sheet>
-          <SheetTrigger asChild>
-            {/* With button, heydration happens */}
-            <Button size="icon" variant="outline">
-              <MenuIcon />
-            </Button>
+          <SheetTrigger render={<Button size="icon" variant="outline" />}>
+            <MenuIcon />
           </SheetTrigger>
 
           <SidebarSheet />

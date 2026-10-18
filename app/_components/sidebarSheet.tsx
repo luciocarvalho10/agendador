@@ -25,10 +25,8 @@ const SidebarSheet = () => {
         <h2 className="font-bold">Olá, faça seu login!</h2>
 
         <Dialog>
-          <DialogTrigger asChild>
-            <Button size="icon">
-              <LogInIcon />
-            </Button>
+          <DialogTrigger render={<Button size="icon" />}>
+            <LogInIcon />
           </DialogTrigger>
 
           <DialogContent className="w-[98%] text-center">
@@ -63,22 +61,20 @@ const SidebarSheet = () => {
       </div>
 
       <div className="flex flex-col gap-2 border-b border-solid p-5 pt-0">
-        {/* <SheetClose className="flex" asChild> */}
-        <SheetClose className="flex" asChild>
-          <Button
-            className="flex flex-1 justify-start gap-2"
-            variant="ghost"
-            asChild
-          >
-            <Link
-              href="/"
-              className="flex flex-1 items-center gap-2"
-              data-slot="sheet-close"
-            >
-              <HomeIcon size={18} />
-              Início
-            </Link>
-          </Button>
+        <SheetClose
+          className="flex"
+          render={
+            <Button
+              className="justify-start gap-2"
+              variant="ghost"
+              render={<Link href="/" />}
+              nativeButton={false}
+            />
+          }
+          nativeButton={false}
+        >
+          <HomeIcon size={18} />
+          Início
         </SheetClose>
 
         <Button className="justify-start gap-2" variant="ghost">
