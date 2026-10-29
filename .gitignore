@@ -41,3 +41,12 @@ yarn-error.log*
 next-env.d.ts
 
 /generated/prisma
+
+# editor and local-tooling files that should not be committed
+.vscode/
+.idea/
+.agents/
+.claude/
+.windsurf/
+AGENTS.md
+CLAUDE.md
