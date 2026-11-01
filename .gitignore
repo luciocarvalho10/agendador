@@ -43,9 +43,11 @@ next-env.d.ts
 
 /generated/prisma
 
-.agents
-.claude
-.husk
-.windsurf
-claude.md
-agents.md
+# editor and local-tooling files that should not be committed
+.vscode/
+.idea/
+.agents/
+.claude/
+.windsurf/
+AGENTS.md
+CLAUDE.md
