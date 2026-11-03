@@ -1,18 +1,22 @@
-import { Card, CardContent } from "./ui/card"
-import Image from "next/image"
-import { Sheet, SheetTrigger } from "./ui/sheet"
-import { MenuIcon } from "lucide-react"
-import SidebarSheet from "./sidebarSheet"
-import { Button } from "./ui/button"
+import { MenuIcon } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+
+import SidebarSheet from './sidebarSheet';
+import { Button } from './ui/button';
+import { Card, CardContent } from './ui/card';
+import { Sheet, SheetTrigger } from './ui/sheet';
 
 const Header = () => {
   return (
     <Card>
-      <CardContent className="flex flex-row items-center justify-between p-5">
-        <Image src="/logo.png" alt="Agendador" height={18} width={120} />
+      <CardContent className='flex flex-row items-center justify-between p-5'>
+        <Link href='/'>
+          <Image src='/logo.png' alt='Agendador' height={18} width={120} />
+        </Link>
 
         <Sheet>
-          <SheetTrigger render={<Button size="icon" variant="outline" />}>
+          <SheetTrigger render={<Button size='icon' variant='outline' />}>
             <MenuIcon />
           </SheetTrigger>
 
@@ -20,7 +24,7 @@ const Header = () => {
         </Sheet>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

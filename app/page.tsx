@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import BarbershopItem from '@/app/_components/barbershopItem';
 import BookingItem from '@/app/_components/bookingItem';
@@ -31,7 +32,12 @@ const Home = async () => {
 
         <div className='mt-6 flex scrollbar-none gap-3 overflow-x-scroll'>
           {quickSearchOptions.map(option => (
-            <Button key={option.title} className='gap-2' variant='secondary'>
+            <Button
+              key={option.title}
+              className='gap-2'
+              variant='secondary'
+              render={<Link href={`/barbershops?service=${option.title}`} />}
+              nativeButton={false}>
               <Image
                 src={option.imageUrl}
                 width={16}
