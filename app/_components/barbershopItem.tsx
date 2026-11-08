@@ -39,7 +39,7 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
           <p className='truncate text-sm text-gray-400'>{barbershop.address}</p>
           <Button
             variant='secondary'
-            className='mt-3 w-full'
+            className='text-primary-foreground hover:bg-primary/80 mt-3 w-full'
             nativeButton={false}
             render={
               <Link href={`/barbershops/${barbershop.id}`}>Reservar</Link>
