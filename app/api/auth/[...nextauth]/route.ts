@@ -1,8 +1,9 @@
-import { db } from "@/app/_lib/prisma"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import NextAuth from "next-auth"
+import { PrismaAdapter } from '@auth/prisma-adapter';
+import NextAuth from 'next-auth';
 // import CredentialsProvider from "next-auth/providers/credentials"
-import GoogleProvider from "next-auth/providers/google"
+import GoogleProvider from 'next-auth/providers/google';
+
+import { db } from '@/app/_lib/prisma';
 
 const handler = NextAuth({
   adapter: PrismaAdapter(db),
@@ -12,6 +13,16 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
-})
+  callbacks: {
+    async session({ session, user }) {
+      session.user = {
+        ...session.user,
+        id: user.id,
+      };
 
-export { handler as GET, handler as POST }
+      return session;
+    },
+  },
+});
+
+export { handler as GET, handler as POST };

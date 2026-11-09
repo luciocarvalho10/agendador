@@ -18,10 +18,21 @@ interface BarbarshopPageProps {
 
 const BarbarshopPage = async ({ params }: BarbarshopPageProps) => {
   const { id } = await params;
-  const barbershop = await db.barbershop.findUnique({
-    where: { id },
-    include: { services: true },
-  });
+  const barbershop = await db.barbershop
+    .findUnique({
+      where: { id },
+      include: { services: true },
+    })
+    .then(
+      barbershop =>
+        barbershop && {
+          ...barbershop,
+          services: barbershop.services.map(service => ({
+            ...service,
+            price: service.price.toNumber(),
+          })),
+        },
+    );
 
   if (!barbershop) {
     return notFound();
@@ -85,8 +96,12 @@ const BarbarshopPage = async ({ params }: BarbarshopPageProps) => {
       <div className='space-y-3 border-b border-solid p-5'>
         <h2 className='text-xs font-bold text-gray-400 uppercase'>Serviços</h2>
         <div className='space-y-3'>
-          {barbershop.services.map(service => (
-            <ServiceItem key={service.id} service={service} />
+          {barbershop.services?.map(service => (
+            <ServiceItem
+              key={service.id}
+              service={service}
+              barbershop={barbershop}
+            />
           ))}
         </div>
       </div>
