@@ -23,16 +23,17 @@ const BarbarshopPage = async ({ params }: BarbarshopPageProps) => {
       where: { id },
       include: { services: true },
     })
-    .then(
-      barbershop =>
-        barbershop && {
-          ...barbershop,
-          services: barbershop.services.map(service => ({
-            ...service,
-            price: service.price.toNumber(),
-          })),
-        },
-    );
+    .then(barbershop => {
+      if (!barbershop) return;
+
+      return {
+        ...barbershop,
+        services: barbershop.services.map(service => ({
+          ...service,
+          price: service.price.toNumber(),
+        })),
+      };
+    });
 
   if (!barbershop) {
     return notFound();
@@ -96,13 +97,15 @@ const BarbarshopPage = async ({ params }: BarbarshopPageProps) => {
       <div className='space-y-3 border-b border-solid p-5'>
         <h2 className='text-xs font-bold text-gray-400 uppercase'>Serviços</h2>
         <div className='space-y-3'>
-          {barbershop.services?.map(service => (
-            <ServiceItem
-              key={service.id}
-              service={service}
-              barbershop={barbershop}
-            />
-          ))}
+          {barbershop.services?.map(service => {
+            return (
+              <ServiceItem
+                key={service.id}
+                service={service}
+                barbershop={barbershop}
+              />
+            );
+          })}
         </div>
       </div>
 
