@@ -15,9 +15,11 @@ import {
 
 import { createBooking } from '../_actions/createBooking';
 import { getBookings } from '../_actions/getBookings';
+import SignInDialog from './signInDialog';
 import { Button } from './ui/button';
 import { Calendar } from './ui/calendar';
 import { Card, CardContent } from './ui/card';
+import { Dialog, DialogContent } from './ui/dialog';
 import {
   Sheet,
   SheetClose,
@@ -90,6 +92,7 @@ const getTimeList = (bookings: Booking[]) => {
 
 const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
   const { data } = useSession();
+  const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false);
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false);
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
@@ -111,6 +114,9 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
 
     fetch();
   }, [selectedDay, service.id]);
+
+  const handleBookingClick = () =>
+    data?.user ? setBookingSheetIsOpen(true) : setSignInDialogIsOpen(true);
 
   const handleBookingSheetOpenChange = () => {
     setSelectedDay(undefined);
@@ -143,156 +149,168 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
   };
 
   return (
-    <Card>
-      <CardContent className='flex items-center gap-3'>
-        <div className='relative max-h-27.5 min-h-27.5 max-w-27.5 min-w-27.5'>
-          <Image
-            loading='eager'
-            src={service.imageUrl}
-            alt={service.name}
-            fill
-            className='rounded-lg object-cover'
-            sizes='auto'
-          />
-        </div>
-
-        <div className='flex-1 space-y-2'>
-          <h3 className='text-sm font-semibold'>{service.name}</h3>
-          <p className='text-sm text-gray-400'>{service.description}</p>
-
-          <div className='flex items-center justify-between'>
-            <p className='text-primary text-sm font-bold'>
-              {Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-              }).format(Number(service.price))}
-            </p>
-
-            <Sheet
-              open={bookingSheetIsOpen}
-              onOpenChange={handleBookingSheetOpenChange}>
-              <Button
-                variant='secondary'
-                size='sm'
-                onClick={() => setBookingSheetIsOpen(true)}
-                className='bg-secondary hover:bg-primary/90 rounded-lg p-2 text-sm font-semibold text-white transition-colors'>
-                Reservar
-              </Button>
-              <SheetContent className='gap-0'>
-                <SheetHeader className='items-center'>
-                  <SheetTitle>Fazer Reserva</SheetTitle>
-                </SheetHeader>
-
-                <div className='flex justify-center border-b border-solid py-4'>
-                  <Calendar
-                    mode='single'
-                    locale={ptBR}
-                    selected={selectedDay}
-                    onSelect={handleDaySelect}
-                    disabled={{ before: addDays(new Date(), 1) }}
-                    today={new Date()}
-                    styles={{
-                      root: {
-                        width: '100%',
-                        backgroundColor: 'transparent',
-                        padding: '16px',
-                      },
-                      caption_label: {
-                        width: '100%',
-                        textTransform: 'capitalize',
-                        textAlign: 'center',
-                      },
-                      weekday: {
-                        width: '100%',
-                        textTransform: 'capitalize',
-                      },
-                      day: { width: '100%' },
-                      day_button: { width: '100%' },
-                      button_previous: {
-                        width: '32px',
-                        height: '32px',
-                        borderColor: 'grey',
-                      },
-                      button_next: {
-                        width: '32px',
-                        height: '32px',
-                        borderColor: 'grey',
-                      },
-                    }}
-                  />
-                </div>
-
-                {selectedDay && (
-                  <div className='flex scrollbar-none gap-3 overflow-x-auto border-b border-solid p-5'>
-                    {getTimeList(dayBookings).map(time => (
-                      <Button
-                        variant={selectedTime === time ? 'default' : 'outline'}
-                        key={time}
-                        className='rounded-full'
-                        onClick={() => handleTimeSelect(time)}>
-                        {time}
-                      </Button>
-                    ))}
-                  </div>
-                )}
-
-                {selectedTime && selectedDay && (
-                  <div className='p-5'>
-                    <Card>
-                      <CardContent className='space-y-3'>
-                        <div className='flex items-center justify-between'>
-                          <h2 className='font-bold'>{service.name}</h2>
-
-                          <p className='text-sm font-bold'>
-                            {Intl.NumberFormat('pt-BR', {
-                              style: 'currency',
-                              currency: 'BRL',
-                            }).format(Number(service.price))}
-                          </p>
-                        </div>
-
-                        <div className='flex items-center justify-between'>
-                          <h2 className='text-sm text-gray-400'>Data</h2>
-                          <p className='text-sm'>
-                            {format(selectedDay, "d 'de' MMMM", {
-                              locale: ptBR,
-                            })}
-                          </p>
-                        </div>
-
-                        <div className='flex items-center justify-between'>
-                          <h2 className='text-sm text-gray-400'>Horário</h2>
-                          <h2 className='text-sm'>{selectedTime}</h2>
-                        </div>
-
-                        <div className='flex items-center justify-between'>
-                          <h2 className='text-sm text-gray-400'>Barbearia</h2>
-                          <h2 className='text-sm'>{barbershop.name}</h2>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                )}
-
-                <SheetFooter className='text-px-5'>
-                  <SheetClose
-                    nativeButton={true}
-                    render={
-                      <Button
-                        disabled={!selectedDay || !selectedTime}
-                        type='submit'
-                        onClick={handleCreateBooking}>
-                        Confirmar
-                      </Button>
-                    }
-                  />
-                </SheetFooter>
-              </SheetContent>
-            </Sheet>
+    <>
+      <Card>
+        <CardContent className='flex items-center gap-3'>
+          <div className='relative max-h-27.5 min-h-27.5 max-w-27.5 min-w-27.5'>
+            <Image
+              loading='eager'
+              src={service.imageUrl}
+              alt={service.name}
+              fill
+              className='rounded-lg object-cover'
+              sizes='auto'
+            />
           </div>
-        </div>
-      </CardContent>
-    </Card>
+
+          <div className='flex-1 space-y-2'>
+            <h3 className='text-sm font-semibold'>{service.name}</h3>
+            <p className='text-sm text-gray-400'>{service.description}</p>
+
+            <div className='flex items-center justify-between'>
+              <p className='text-primary text-sm font-bold'>
+                {Intl.NumberFormat('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                }).format(Number(service.price))}
+              </p>
+
+              <Sheet
+                open={bookingSheetIsOpen}
+                onOpenChange={handleBookingSheetOpenChange}>
+                <Button
+                  variant='secondary'
+                  size='sm'
+                  onClick={handleBookingClick}
+                  className='bg-secondary hover:bg-primary/90 rounded-lg p-2 text-sm font-semibold text-white transition-colors'>
+                  Reservar
+                </Button>
+                <SheetContent className='gap-0'>
+                  <SheetHeader className='items-center'>
+                    <SheetTitle>Fazer Reserva</SheetTitle>
+                  </SheetHeader>
+
+                  <div className='flex justify-center border-b border-solid py-4'>
+                    <Calendar
+                      mode='single'
+                      locale={ptBR}
+                      selected={selectedDay}
+                      onSelect={handleDaySelect}
+                      disabled={{ before: addDays(new Date(), 1) }}
+                      today={new Date()}
+                      styles={{
+                        root: {
+                          width: '100%',
+                          backgroundColor: 'transparent',
+                          padding: '16px',
+                        },
+                        caption_label: {
+                          width: '100%',
+                          textTransform: 'capitalize',
+                          textAlign: 'center',
+                        },
+                        weekday: {
+                          width: '100%',
+                          textTransform: 'capitalize',
+                        },
+                        day: { width: '100%' },
+                        day_button: { width: '100%' },
+                        button_previous: {
+                          width: '32px',
+                          height: '32px',
+                          borderColor: 'grey',
+                        },
+                        button_next: {
+                          width: '32px',
+                          height: '32px',
+                          borderColor: 'grey',
+                        },
+                      }}
+                    />
+                  </div>
+
+                  {selectedDay && (
+                    <div className='flex scrollbar-none gap-3 overflow-x-auto border-b border-solid p-5'>
+                      {getTimeList(dayBookings).map(time => (
+                        <Button
+                          variant={
+                            selectedTime === time ? 'default' : 'outline'
+                          }
+                          key={time}
+                          className='rounded-full'
+                          onClick={() => handleTimeSelect(time)}>
+                          {time}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+
+                  {selectedTime && selectedDay && (
+                    <div className='p-5'>
+                      <Card>
+                        <CardContent className='space-y-3'>
+                          <div className='flex items-center justify-between'>
+                            <h2 className='font-bold'>{service.name}</h2>
+
+                            <p className='text-sm font-bold'>
+                              {Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL',
+                              }).format(Number(service.price))}
+                            </p>
+                          </div>
+
+                          <div className='flex items-center justify-between'>
+                            <h2 className='text-sm text-gray-400'>Data</h2>
+                            <p className='text-sm'>
+                              {format(selectedDay, "d 'de' MMMM", {
+                                locale: ptBR,
+                              })}
+                            </p>
+                          </div>
+
+                          <div className='flex items-center justify-between'>
+                            <h2 className='text-sm text-gray-400'>Horário</h2>
+                            <h2 className='text-sm'>{selectedTime}</h2>
+                          </div>
+
+                          <div className='flex items-center justify-between'>
+                            <h2 className='text-sm text-gray-400'>Barbearia</h2>
+                            <h2 className='text-sm'>{barbershop.name}</h2>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )}
+
+                  <SheetFooter className='text-px-5'>
+                    <SheetClose
+                      nativeButton={true}
+                      render={
+                        <Button
+                          disabled={!selectedDay || !selectedTime}
+                          type='submit'
+                          onClick={handleCreateBooking}>
+                          Confirmar
+                        </Button>
+                      }
+                    />
+                  </SheetFooter>
+                </SheetContent>
+              </Sheet>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Dialog
+        open={signInDialogIsOpen}
+        onOpenChange={open => setSignInDialogIsOpen(open)}>
+        <DialogContent className='w-[98%] text-center'>
+          <SignInDialog />
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
