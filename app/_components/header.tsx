@@ -16,10 +16,14 @@ const Header = () => {
         </Link>
 
         <Sheet>
-          <SheetTrigger render={<Button size='icon' variant='outline' />}>
-            <MenuIcon />
-          </SheetTrigger>
-
+          <SheetTrigger
+            nativeButton={true}
+            render={
+              <Button size='icon' variant='outline'>
+                <MenuIcon />
+              </Button>
+            }
+          />
           <SidebarSheet />
         </Sheet>
       </CardContent>
