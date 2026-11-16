@@ -69,7 +69,11 @@ const SidebarSheet = () => {
           Início
         </SheetClose>
 
-        <Button className='justify-start gap-2' variant='ghost'>
+        <Button
+          className='justify-start gap-2'
+          variant='ghost'
+          nativeButton={false}
+          render={<Link href='/bookings' />}>
           <CalendarIcon size={18} />
           Agendamentos
         </Button>
@@ -79,24 +83,26 @@ const SidebarSheet = () => {
         {quickSearchOptions.map(option => (
           <SheetClose
             key={option.title}
+            nativeButton={false}
             render={
               <Button
                 className='justify-start gap-2'
                 variant='ghost'
                 nativeButton={false}
                 render={
-                  <Link href={`/barbershops?service=${option.title}`} />
-                }></Button>
+                  <Link href={`/barbershops?service=${option.title}`}>
+                    <Image
+                      src={option.imageUrl}
+                      height={18}
+                      width={18}
+                      alt={option.title}
+                    />
+                    {option.title}
+                  </Link>
+                }
+              />
             }
-            nativeButton={false}>
-            <Image
-              src={option.imageUrl}
-              height={18}
-              width={18}
-              alt={option.title}
-            />
-            {option.title}
-          </SheetClose>
+          />
         ))}
       </div>
 

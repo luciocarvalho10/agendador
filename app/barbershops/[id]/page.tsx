@@ -9,6 +9,7 @@ import SidebarSheet from '@/app/_components/sidebarSheet';
 import { Button } from '@/app/_components/ui/button';
 import { Sheet, SheetTrigger } from '@/app/_components/ui/sheet';
 import { db } from '@/app/_lib/prisma';
+import servicePriceDecimalToNumber from '@/app/_lib/servicePriceDecimalToNumber';
 
 interface BarbarshopPageProps {
   params: {
@@ -28,10 +29,7 @@ const BarbarshopPage = async ({ params }: BarbarshopPageProps) => {
 
       return {
         ...barbershop,
-        services: barbershop.services.map(service => ({
-          ...service,
-          price: service.price.toNumber(),
-        })),
+        services: barbershop.services.map(servicePriceDecimalToNumber),
       };
     });
 
