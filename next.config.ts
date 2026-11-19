@@ -1,11 +1,14 @@
-import type { NextConfig } from "next"
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
-  images: {
-    remotePatterns: [{ hostname: "utfs.io" }],
+  experimental: {
+    agentUpgrade: 'security',
   },
-}
+  images: {
+    remotePatterns: [{ hostname: 'utfs.io' }],
+  },
+};
 
-export default nextConfig
+export default nextConfig;
